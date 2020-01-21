@@ -1,0 +1,2 @@
+from pally.helper import eda
+eda.print_null_cntNpct([df])
