@@ -1,0 +1,19 @@
+from xgboost import XGBClassifier,plot_importance
+clf = XGBClassifier()
+
+%%time
+score = evaluate_model(x,y,clf)
+print(f"scores are {score}, and its mean value is {score.mean()}")
+
+clf.fit(x,y,eval_metric=['auc'])
+
+plot_importance(clf,importance_type='gain',max_num_features=10)
+
+clf = XGBClassifier(max_depth=3)
+
+%%time
+score = evaluate_model(x,y,clf)
+print(f"scores are {score}, and its mean value is {score.mean()}")
+
+import xgbfir
+xgbfir.saveXgbFI(clf, feature_names=x.columns, MaxInteractionDepth=4, OutputXlsxFile='fi_gbrf_2nd_strategy.xlsx')
