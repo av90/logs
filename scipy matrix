@@ -1,0 +1,9 @@
+OneHot encoder from sklearn generate data in SPARSE form which is used as an efficient way of training data and takes very less time 
+as compared to its dense form.
+
+I wanted to do feature selection but knowing which column is working and which wont was a problem.
+
+|enc.get_feature_names()| --> this can be used to get all encoded feature name.
+|pd.DataFrame().sparse.from_spmatrix(nom_matrix)| --> us from convert scipy compressed matrix to Dataframe
+
+df_work_sprs =scipy.sparse.hstack([nom_matrix,scipy.sparse.coo_matrix(df_work).astype('float64')]).tocsr()
