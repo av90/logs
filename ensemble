@@ -1,0 +1,15 @@
+# fit 1st model in 1st half
+gbt = GradientBoostingClassifier(n_estimators=n_estimator)
+gbt.fit(X_train, y_train)
+
+# fit OHE on leafs of 1st half data from 1st model 
+ohe = OneHotEncoder()
+ohe.fit(gbt.apply(X_train)[:, :, 0])
+
+# fit 2nd model on OHE leaf of 2nd half data 
+gbt_lr = LogisticRegression(max_iter=1000)
+gbt_lr.fit(ohe.transform(gbt.apply(X_train_lr)[:, :, 0]), y_train_lr)
+
+# pred
+y_pred_gbt_lr = gbt_lr.predict_proba(ohe.transform(gbt.apply(X_test)[:, :, 0]))[:, 1]
+fpr_gbt_lr, tpr_gbt_lr, _ = roc_curve(y_test, y_pred_gbt_lm)
