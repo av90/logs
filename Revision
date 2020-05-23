@@ -1,0 +1,53 @@
+- For wider dataset, you can use transpose
+  train.head().T
+  
+- when you want to replace a missing values of `age` with median/mean of 2 columns `['education','program_id']`
+  train.groupby(by=['education','program_id'])['age'].apply(lambda x: x.fillna(x.median()))
+  
+- adding a missing indicator
+  np.where(train.trainee_engagement_rating.isnull(),1,0)
+  
+- list compherension with if and else
+  [i if i in trainee_id_common else 0.7 for i in train.trainee_id]
+  
+- target distribution
+  f=train.target.value_counts(normalize=True).round(2).plot.pie(figsize=(6,6),colors=['grey','red'],title='Response Variable Distribution',explode=(0,0.1),startangle=90,autopct='%1.2f%%',shadow=True)
+  
+- Get axis from seaborn and then rotate 45 degree and then align it to right. Also give it title
+  ax.set_xticklabels(ax.get_xticklabels(), rotation=45,horizontalalignment='right')
+  ax.set_title(i)
+  
+- using feature and axis to plot column wise. Also get rid of last unused grid. Give a tight layout to make sure title dont overlap.
+  fig,axes = plt.subplots(2,3,figsize=(15,8))
+  for i,ax in zip(binary,axes.flatten())
+  
+  axes[-1,-1].axis('off')
+  fig.tight_layout()
+  
+- Handling cyclic feature by deriving sin and cos. 7 is the distinct values
+  np.sin(train.day*(2*np.pi/7))
+  np.cos(train.day*(2*np.pi/7))
+  
+- ploting diagonal line
+  plt.plot([0,1], [0,1], linestyle='--', label='No Skill')
+  
+- calculating gmean
+  gmeans  =  np.sqrt(tpr *  (1-fpr))
+  
+  OR
+  
+  J = tpr - fpr
+  
+- contigency table, and its heatmap
+  pd.crosstab(train.ord_0,train.ord_1,normalize=True)
+  
+  OR
+  
+  from scipy.stats import chi2_contingency
+  chi2_contingency(ctbl)
+  
+  sns.heatmap(ctbl,cmap='PiYG',center=0,annot=True,fmt='.2f')
+  
+  
+  
+  
