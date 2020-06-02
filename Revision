@@ -49,4 +49,6 @@
   sns.heatmap(ctbl,cmap='PiYG',center=0,annot=True,fmt='.2f')
   
  - TimeseriesGenerator(x,y,length_of_x,batch_size)
-  
+ 
+ 
+ - %matplotlib notebook
