@@ -1,0 +1,64 @@
+import os
+os.chdir(r'D:\data\amazon_sentiment\electronics')
+
+import bs4
+import nltk
+from nltk.stem import WordNetLemmatizer
+import re
+
+# spacy lemma
+import spacy
+nlp = spacy.load('en_core_web_sm')
+
+
+# load stop word
+stopword = [i.strip() for i in open('stopword.txt')]
+stopword = [i for i in stopword  if i not in ['']]
+
+# load data
+pos = bs4.BeautifulSoup(open('positive.review').read(), features='html5lib')
+pos = pos.findAll('review_text')
+
+neg = bs4.BeautifulSoup(open('negative.review').read(), features='html5lib')
+neg = neg.findAll('review_text')
+
+lemma = WordNetLemmatizer()
+
+# clean our data
+def my_tokenize(data):
+    '''
+    function to clean,tokenize,remove stop words,lemmatize data
+    
+    INPUT : multiple data set
+    
+    OUTPUT : list of list
+    
+    '''
+    clean_data = []
+    for review in data:
+        review = review.text
+        review = re.sub(r'\n', ' ', review) # get rid of new line
+        review = re.sub(r'\s+',' ', review) # reivew multiple space with single space
+        review = review.lower()
+        
+        # tokenize, check it is not a stopword and have length of word more than 2
+        review = [word for word in nltk.word_tokenize(review) if word not in stopword and len(word) > 2]
+        
+        # lemmentization
+        # review = [lemma.lemmatize(word) for word in review] # through nltk
+        review = [word.lemma_ for word in nlp(' '.join(review))] # through spacy
+        clean_data.append(review)
+        
+    return clean_data
+
+pos = my_tokenize(pos)
+neg = my_tokenize(neg)
+
+# unstacking list of list
+pos_words = [word for sent in pos for word in sent]
+neg_words = [word for sent in neg for word in sent] 
+
+vocab = set(pos_words+neg_words)
+
+word2int = {word:i for i,word in enumerate(vocab)}
+int2word = list(vocab)
